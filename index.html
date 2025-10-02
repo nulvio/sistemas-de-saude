@@ -3,339 +3,545 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Esporotricose em Florianópolis</title>
+    <title>Organização do Sistema de Saúde</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #B0C4DE;
         }
-        .card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .header-gradient {
+            background: linear-gradient(90deg, #2c3e50, #363636);
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .section-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
         }
-        .clinical-summary-bg {
-            background-color: #f8fafc;
-        }
-        .accordion-content {
-            max-height: 0;
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            padding: 0 1rem;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.5rem;
         }
-        .accordion-item.active .accordion-content {
-            padding: 1rem;
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
-        .accordion-item.active .accordion-icon {
-            transform: rotate(180deg);
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        #password-box {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        #password-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body>
 
-    <!-- Header Section -->
-    <header class="bg-teal-50">
-        <div class="container mx-auto px-6 py-12 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-teal-900">Esporotricose</h1>
-            <p class="mt-4 text-lg text-teal-800">Um guia completo para os profissionais de saúde da Atenção Primária.</p>
+    <!-- Seção de Senha -->
+    <div id="password-overlay">
+        <div id="password-box">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Acesso Restrito</h2>
+            <p class="text-gray-600 mb-2">Por favor, insira a senha para continuar.</p>
+            <form id="password-form">
+                <input type="password" id="password-input" placeholder="Senha">
+                <p id="error-message" class="text-red-500 text-sm h-5"></p>
+                <button type="submit" class="btn btn-primary w-full">
+                    Entrar
+                </button>
+            </form>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Content -->
-    <main class="container mx-auto px-6 py-10">
+    <div id="main-content" class="container mx-auto p-4 md:p-8 max-w-4xl hidden">
+        <header class="text-center mb-12 header-gradient text-white p-8 rounded-xl shadow-lg">
+            <h2 class="text-2xl font-semibold opacity-90 mb-6">Escola de Saúde Pública de Florianópolis</h2>
+            <h1 class="text-4xl md:text-5xl font-bold">Organização do Sistema de Saúde</h1>
+            <p class="text-lg opacity-80 mt-2">Um guia para entender a estrutura e os modelos de saúde</p>
+        </header>
 
-        <!-- Clinical Summary Section -->
-        <section>
-            <h2 class="text-3xl font-bold text-center mb-8 text-teal-900">O que todo Profissional precisa saber!</h2>
-            <div class="space-y-4" id="accordion-container">
-                <!-- Accordion Item 1 -->
-                <div class="accordion-item bg-white rounded-lg shadow">
-                    <button class="accordion-header w-full flex justify-between items-center text-left p-4 font-bold text-xl text-teal-700 hover:bg-slate-100 rounded-lg">
-                        <span>O que é?</span>
-                        <svg class="accordion-icon w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p>É uma micose subcutânea causada por fungos do gênero <em>Sporothrix</em>. Acomete humanos e animais, sendo a principal forma de transmissão para humanos o contato (arranhaduras, mordeduras) com felinos doentes.</p>
+        <main>
+            <!-- Seção 1: Vídeos Introdutórios -->
+            <section id="videos" class="section-card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">1. Vídeos Introdutórios</h2>
+                <p class="mb-8 text-gray-700">
+                    Inicie assistindo aos dois vídeos disponíveis abaixo que irão lhes ajudar no entendimento sobre
+                    organização e estruturação de Sistemas de Saúde.
+                </p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2">a) Modelos de organização de Sistemas de Saúde</h3>
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/oAs7MLhZFlw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2">b) Modelos de estruturação de Sistemas de Saúde</h3>
+                         <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/OCmoYD06-BQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
                     </div>
                 </div>
-                <!-- Accordion Item 2 -->
-                <div class="accordion-item bg-white rounded-lg shadow">
-                    <button class="accordion-header w-full flex justify-between items-center text-left p-4 font-bold text-xl text-teal-700 hover:bg-slate-100 rounded-lg">
-                        <span>Manifestações Clínicas e Incubação</span>
-                        <svg class="accordion-icon w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p><strong>Período de incubação:</strong> De 7 a 30 dias, podendo chegar a 6 meses.<br><strong>Forma mais frequente:</strong> Linfocutânea, com nódulos subcutâneos que seguem o trajeto do sistema linfático. Outras formas incluem a cutânea (lesão única ou múltipla), extracutânea (ossos, olhos) e disseminada (múltiplos órgãos).</p>
+            </section>
+
+            <!-- Seção 2: Materiais de Aprofundamento -->
+            <section id="artigos" class="section-card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">2. Para Saber Mais</h2>
+                <p class="mb-8 text-gray-700">
+                    Caso queira saber mais a respeito indicamos os artigos a seguir:
+                </p>
+                <ul class="space-y-4">
+                    <li><a href="https://www.pnhp.org/single_payer_resources/health_care_systems_four_basic_models.php" target="_blank" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors">a) Artigo do movimento “médicos por um programa de saúde nacional”, dos EUA</a></li>
+                    <li><a href="https://drive.google.com/file/d/1Ni0GAGbqWWwpfaRcMRzhtTU97k8vwxs3/view?usp=sharing" target="_blank" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors">b) Resumo sobre modelos de organização de sistemas de saúde</a></li>
+                    <li><a href="https://drive.google.com/file/d/1JXcUPQscLHl4DxlXT6m7qZDwbl8OHkfr/view?usp=sharing" target="_blank" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors">c) Resumo sobre modelos de estruturação de Sistemas de Saúde</a></li>
+                    <li><a href="https://drive.google.com/file/d/12oxV0X3XCsR5iRS93oheY9TCa8TmMPPm/view?usp=sharing" target="_blank" class="text-blue-600 hover:text-blue-800 hover:underline transition-colors">d) Artigo “O Sistema de Saúde brasileiro ante a tipologia internacional”</a></li>
+                </ul>
+            </section>
+
+            <!-- Seção 3: Atividade de Reflexão -->
+            <section id="reflexao" class="section-card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">3. Atividade de Reflexão Crítica</h2>
+                <p class="mb-6 text-gray-700">
+                    Faça uma reflexão crítica sobre o sistema de saúde brasileiro estruturada com os tópicos listados abaixo, analisando sempre suas fraquezas e fortalezas. Para isso você pode utilizar como base o artigo repassado ou outras fontes disponíveis na rede, mas esperamos que explicite a sua visão/opinião própria a respeito do assunto.
+                </p>
+                <ol class="list-decimal list-inside space-y-2 mb-8 bg-gray-100 p-6 rounded-lg">
+                    <li>Construção histórica</li>
+                    <li>Estruturação do sistema</li>
+                    <li>Papel dos entes federativos (Governo Federal, Estados e Municípios)</li>
+                    <li>Financiamento público e privado</li>
+                    <li>Modelo de pagamento dos profissionais</li>
+                </ol>
+                <p class="mb-6 text-gray-700">
+                    Utilize o formulário disponibilizado no botão abaixo para registrar as suas reflexões. Esse exercício será utilizado na primeira atividade do próximo encontro presencial.
+                </p>
+                <div class="text-center">
+                    <a href="https://forms.gle/atkhKeWmp3eoo5Zo8" target="_blank" class="btn btn-primary">
+                        Acessar Formulário de Reflexão
+                    </a>
+                </div>
+            </section>
+            
+            <!-- Seção 4: Quiz Interativo -->
+            <section id="quiz-container" class="section-card">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">4. Teste seus Conhecimentos</h2>
+                <div id="quiz-content" class="mx-auto">
+                    <div id="question-area" class="mb-4">
+                        <p id="question-text" class="text-xl font-semibold text-center mb-2"></p>
+                        <p id="question-hint" class="text-sm text-gray-500 text-center mb-6"></p>
+                    </div>
+                    <div id="answers-buttons" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                    <div id="feedback-area" class="mt-6 text-center"></div>
+                    <div class="flex justify-between items-center mt-6">
+                        <p id="progress-text" class="text-sm text-gray-600"></p>
+                        <button id="next-button" class="bg-gray-800 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-900 transition-colors hidden">Próxima</button>
                     </div>
                 </div>
-                <!-- Accordion Item 3 -->
-                <div class="accordion-item bg-white rounded-lg shadow">
-                    <button class="accordion-header w-full flex justify-between items-center text-left p-4 font-bold text-xl text-teal-700 hover:bg-slate-100 rounded-lg">
-                        <span>Diagnóstico e Notificação</span>
-                        <svg class="accordion-icon w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p><strong>Notificação:</strong> É compulsória e deve ser realizada na SUSPEITA do caso. O diagnóstico pode ser confirmado por critério clínico-epidemiológico ou laboratorial (biópsia com cultura para fungos). É essencial diferenciar de leishmaniose, tuberculose cutânea, entre outras.</p>
-                    </div>
+                 <div id="quiz-results" class="text-center hidden">
+                    <h3 class="text-3xl font-bold text-blue-800">Quiz Finalizado!</h3>
+                    <p class="text-xl mt-4">Sua pontuação final é:</p>
+                    <p id="score-text" class="text-5xl font-bold my-4 text-green-600"></p>
+                    <button id="restart-button" class="btn btn-primary">Tentar Novamente</button>
                 </div>
-                <!-- Accordion Item 4 -->
-                <div class="accordion-item bg-white rounded-lg shadow">
-                     <button class="accordion-header w-full flex justify-between items-center text-left p-4 font-bold text-xl text-teal-700 hover:bg-slate-100 rounded-lg">
-                        <span>Tratamento (Disponível no SUS)</span>
-                        <svg class="accordion-icon w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="accordion-content">
-                        <p><strong>Primeira escolha:</strong> Itraconazol (200 mg/dia para adultos).<br><strong>Casos graves:</strong> Anfotericina B.<br><strong>Gestantes:</strong> Termoterapia (calor local) é a opção mais segura para casos não complicados.<br><strong>Atenção:</strong> Pacientes com cirurgia bariátrica podem ter má absorção do Itraconazol.</p>
-                    </div>
-                </div>
-                <!-- Accordion Item 5 -->
-                <div class="accordion-item bg-white rounded-lg shadow">
-                    <button class="accordion-header w-full flex justify-between items-center text-left p-4 font-bold text-xl text-teal-700 hover:bg-slate-100 rounded-lg">
-                        <span>Fluxo de Atendimento na APS</span>
-                         <svg class="accordion-icon w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div class="accordion-content">
-                        <ol class="list-decimal list-inside space-y-2">
-                            <li>Identificar caso suspeito (lesão ulcerada + história de contato com felinos).</li>
-                            <li>Realizar testes rápidos para HIV e Sífilis.</li>
-                            <li>Notificar o caso via prontuário municipal (CID B42) e preencher a ficha de investigação.</li>
-                            <li>Fazer registro fotográfico da lesão com consentimento.</li>
-                            <li>Aguardar orientação da Vigilância Epidemiológica para iniciar tratamento ou encaminhar para biópsia com dermatologista.</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Access Section -->
-        <section class="mt-12">
-            <h2 class="text-3xl font-bold text-center mb-4 text-teal-900">🚀 #semtempo? Sem problemas! 👇</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-
-                <!-- Card: Podcast -->
-                <div class="card bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center">
-                    <div class="text-5xl mb-4">🎧</div>
-                    <h3 class="text-xl font-bold mb-2">Podcast-Resumo</h3>
-                    <p class="text-gray-600 mb-4">Sua dose de conhecimento no fone de ouvido! Perfeito para o trânsito, a pausa para o café ou enquanto se exercita.</p>
-                    <a href="https://drive.google.com/file/d/1b7QnQZibTN51XjQkoZDWZ9OJOB6wQVq4/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="mt-auto bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Ouvir Podcast</a>
-                </div>
-
-                <!-- Card: Video -->
-                <div class="card bg-white rounded-lg shadow-lg p-6 flex flex-col text-center">
-                    <h3 class="text-xl font-bold mb-4">Vídeo-Resumo</h3>
-                    <div class="w-full aspect-video rounded-lg overflow-hidden">
-                       <iframe class="w-full h-full" src="https://www.youtube.com/embed/wkKjQXRtaxo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    </div>
-                </div>
-                
-                <!-- Card: Chat -->
-                <div class="card bg-white rounded-lg shadow-lg p-6 flex flex-col items-center text-center md:col-span-2 lg:col-span-1">
-                    <div class="text-5xl mb-4">🧠</div>
-                    <h3 class="text-xl font-bold mb-2">Chat Interativo</h3>
-                    <p class="text-gray-600 mb-4">Faça perguntas à IA sobre o conteúdo e acesse os resumos. Requer login com uma conta Google.</p>
-                    <a href="http://bit.ly/chatesporotricose" target="_blank" rel="noopener noreferrer" class="mt-auto bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-6 rounded-full">Acessar Chat</a>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Additional Resources Section -->
-        <div class="mt-12 bg-white rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-bold text-center mb-6">Saiba Mais</h2>
-            <div class="flex flex-wrap justify-center gap-6">
-                <a href="https://drive.google.com/file/d/1JUyyswUvtFPGTeRYKcfxySIP25z2Gtmv/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105">
-                    📄 Documento Orientador (PDF)
-                </a>
-                <a href="https://salasituacao.shinyapps.io/painel_esporotricose/" target="_blank" rel="noopener noreferrer" class="bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 px-8 rounded-full transition-transform transform hover:scale-105">
-                    📊 Sala de Situação (Dados)
-                </a>
-            </div>
-        </div>
-
-        <!-- Video Embed Section -->
-        <section class="mt-12">
-            <h2 class="text-2xl font-bold text-center mb-6">PACK Brasil</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="https://i.imgur.com/2sodxiN.png" alt="Fluxograma de diagnóstico para úlceras de pele que não cicatrizam" class="w-full h-auto rounded">
-                    <p class="text-center text-sm mt-2 text-gray-600">Fluxograma para diagnóstico diferencial de úlceras de pele.</p>
-                </div>
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                    <img src="https://i.imgur.com/meQoPeB.png" alt="Nódulos na pele" class="w-full h-auto rounded">
-                    <p class="text-center text-sm mt-2 text-gray-600">Exemplos de nódulos e lesões cutâneas.</p>
-                </div>
-            </div>
-        </section>
+            </section>
+        </main>
         
-        <!-- Interactive Quiz Section -->
-        <section class="mt-12">
-            <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
-                <h2 class="text-3xl font-bold text-center mb-8 text-teal-900">Teste seu Conhecimento</h2>
-                <div id="quiz-container" class="mx-auto max-w-2xl">
-                    <!-- Quiz will be dynamically generated here -->
-                </div>
-            </div>
-        </section>
+        <footer class="text-center mt-12 py-6 border-t border-gray-300">
+            <p class="text-gray-600">&copy; 2024 Organização do Sistema de Saúde. Todos os direitos reservados.</p>
+        </footer>
 
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white mt-12">
-        <div class="container mx-auto px-6 py-6 text-center">
-            <p>&copy; 2025 Secretaria Municipal de Saúde de Florianópolis</p>
-            <p class="text-sm text-slate-400 mt-2">Conhecimento prático para otimizar sua rotina. Acesse os novos formatos para ficar por dentro de tudo!</p>
-            <p class="text-xs text-slate-500 mt-4">Este material foi produzido pelo Departamento de Gestão da Clínica em parceria com a Escola de Saúde Pública de Florianópolis.</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        const accordionContainer = document.getElementById('accordion-container');
-        if(accordionContainer) {
-            const accordionHeaders = accordionContainer.querySelectorAll('.accordion-header');
-            accordionHeaders.forEach(header => {
-                header.addEventListener('click', () => {
-                    const accordionItem = header.parentElement;
-                    const accordionContent = header.nextElementSibling;
-                    const isActive = accordionItem.classList.contains('active');
+        // Lógica da senha
+        const passwordOverlay = document.getElementById('password-overlay');
+        const passwordForm = document.getElementById('password-form');
+        const passwordInput = document.getElementById('password-input');
+        const errorMessage = document.getElementById('error-message');
+        const mainContent = document.getElementById('main-content');
+        
+        const correctPassword = 'esp2025';
 
-                    // Close all items
-                    accordionContainer.querySelectorAll('.accordion-item').forEach(item => {
-                        item.classList.remove('active');
-                        item.querySelector('.accordion-content').style.maxHeight = '0px';
-                    });
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const enteredPassword = passwordInput.value;
+            
+            if (enteredPassword === correctPassword) {
+                passwordOverlay.style.display = 'none';
+                mainContent.classList.remove('hidden');
+                startQuiz(); // Inicia o quiz após a senha correta
+            } else {
+                errorMessage.textContent = 'Senha incorreta. Tente novamente.';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
 
-                    // Open the clicked one if it wasn't active
-                    if (!isActive) {
-                        accordionItem.classList.add('active');
-                        accordionContent.style.maxHeight = accordionContent.scrollHeight + 32 + 'px';
-                    }
-                });
-            });
-        }
 
-        // --- QUIZ SCRIPT ---
+        // Lógica do Quiz
         const quizData = [
-            { question: "Qual é a principal forma de transmissão da esporotricose para seres humanos, de acordo com o cenário epidemiológico atual em Florianópolis?", hint: "Pense no papel que os animais de estimação, especialmente um tipo, desempenham na disseminação da doença mencionada nos documentos.", options: [{ text: "Contato com solo ou plantas contaminadas durante a jardinagem.", correct: false, rationale: "Embora o fungo viva na natureza, esta não é a principal fonte de infecção para humanos no surto atual." },{ text: "Arranhaduras ou mordeduras de felinos doentes.", correct: true, rationale: "O documento técnico destaca que os felinos são os principais vetores na cadeia de transmissão para humanos." },{ text: "Ingestão de água ou alimentos contaminados pelo fungo.", correct: false, rationale: "A transmissão da esporotricose não ocorre por via digestiva." },{ text: "Picadas de insetos que tiveram contato com animais infectados.", correct: false, rationale: "A doença não é transmitida por vetores como mosquitos ou outros insetos." }] },
-            { question: "Qual é a apresentação clínica mais frequente da esporotricose em humanos?", hint: "Lembre-se da imagem que mostra a evolução das lesões no braço de um paciente, formando uma espécie de \"cordão\".", options: [{ text: "Forma cutânea, com uma única ferida que não cicatriza.", correct: false, rationale: "Embora a forma cutânea exista, não é a mais comum descrita no material." },{ text: "Forma disseminada, afetando múltiplos órgãos internos simultaneamente.", correct: false, rationale: "Esta é a forma mais grave e rara da doença, não a mais frequente." },{ text: "Forma linfocutânea, com nódulos que seguem o trajeto do sistema linfático.", correct: true, rationale: "O material de referência aponta esta como a manifestação mais comum da doença." },{ text: "Forma extracutânea, com manifestações apenas nos olhos ou ossos, sem lesões na pele.", correct: false, rationale: "Esta forma é menos comum e caracterizada pela ausência de lesões cutâneas." }] },
-            { question: "Sobre a notificação da esporotricose humana, qual é a conduta correta para um profissional de saúde?", hint: "A vigilância epidemiológica precisa agir rapidamente. O que permite essa agilidade?", options: [{ text: "A notificação é obrigatória apenas para casos confirmados por biópsia.", correct: false, rationale: "A orientação é notificar antes mesmo da confirmação laboratorial para agilizar a vigilância." },{ text: "A notificação deve ser realizada a partir da suspeita do caso.", correct: true, rationale: "A nota técnica informa que a notificação é compulsória e deve ser feita já na suspeita clínica-epidemiológica." },{ text: "Apenas os casos em animais precisam ser notificados.", correct: false, rationale: "Tanto os casos humanos quanto os animais são de notificação compulsória." },{ text: "A esporotricose não é uma doença de notificação compulsória no município.", correct: false, rationale: "A doença é de notificação compulsória em nível municipal, estadual e nacional." }] },
-            { question: "Qual é o medicamento de primeira escolha, disponibilizado gratuitamente pelo SUS, para o tratamento da esporotricose humana em adultos?", hint: "O resumo clínico menciona um antifúngico oral como tratamento padrão.", options: [{ text: "Anfotericina B", correct: false, rationale: "Este medicamento é reservado para os casos mais graves da doença, não sendo a primeira escolha." },{ text: "Terbinafina", correct: false, rationale: "Apesar de ser uma opção, a nota técnica menciona que este medicamento não está disponível no SUS." },{ text: "Penicilina", correct: false, rationale: "A penicilina é um antibiótico usado para infecções bacterianas, não sendo eficaz contra fungos." },{ text: "Itraconazol", correct: true, rationale: "Este é o antifúngico de escolha para as formas mais comuns da doença e é fornecido pelo SUS." }] },
-            { question: "Qual é o período de incubação mais comum da esporotricose, desde o contato com o fungo até o aparecimento dos primeiros sintomas?", hint: "O material aponta um intervalo que geralmente se encaixa dentro de um mês.", options: [{ text: "De 24 a 48 horas.", correct: false, rationale: "Este período é muito curto para o desenvolvimento da micose." },{ text: "De 7 a 30 dias.", correct: true, rationale: "O material informativo indica este como o intervalo de tempo mais usual para o surgimento das lesões." },{ text: "Aproximadamente 6 meses.", correct: false, rationale: "Embora possa chegar a 6 meses em casos raros, este não é o período comum." },{ text: "Mais de um ano.", correct: false, rationale: "Um período de incubação tão longo não é descrito para esta doença." }] },
-            { question: "Para uma gestante com esporotricose não complicada, qual é o tratamento mais recomendado?", hint: "Pense em uma alternativa de tratamento que não envolva medicamentos sistêmicos.", options: [{ text: "Uso de Itraconazol em doses menores.", correct: false, rationale: "Os antifúngicos azóis, como o Itraconazol, são contraindicados na gestação devido ao risco teratogênico." },{ text: "Aguardar o fim da gestação para iniciar o tratamento.", correct: false, rationale: "O tratamento não deve ser adiado, pois a infecção pode progredir." },{ text: "Termoterapia (aplicação de calor local).", correct: true, rationale: "Devido às contraindicações dos medicamentos, a termoterapia é indicada como método físico adjuvante para gestantes." },{ text: "Anfotericina B intravenosa.", correct: false, rationale: "A Anfotericina B é reservada para casos graves, não para formas não complicadas." }] },
-            { question: "Ao suspeitar de um caso de esporotricose no Centro de Saúde, além da notificação, qual procedimento é orientado a ser feito no momento do atendimento?", hint: "O protocolo inclui a investigação de outras doenças que podem coexistir ou ter sintomas parecidos.", options: [{ text: "Realizar imediatamente a biópsia da lesão.", correct: false, rationale: "A biópsia é realizada por um especialista (dermatologista) após encaminhamento, não no primeiro atendimento no CS." },{ text: "Iniciar o tratamento com Itraconazol e aguardar a melhora.", correct: false, rationale: "O tratamento pode ser orientado após a avaliação da vigilância, mas há outros passos a seguir antes." },{ text: "Realizar testes rápidos para HIV e Sífilis.", correct: true, rationale: "A nota técnica especifica a realização desses testes como parte do protocolo inicial de atendimento." },{ text: "Encaminhar o paciente diretamente para o hospital.", correct: false, rationale: "O manejo inicial do caso é feito na Atenção Primária, que encaminhará se necessário." }] },
-            { question: "Qual é a orientação correta para um animal que morreu com suspeita de esporotricose?", hint: "A questão envolve saúde pública e o controle da disseminação do fungo no ambiente.", options: [{ text: "Deve ser enterrado em um local profundo no quintal para evitar contaminação.", correct: false, rationale: "Enterrar o animal pode contaminar o solo com o fungo, representando um risco." },{ text: "Deve ser descartado no lixo comum, em um saco bem fechado.", correct: false, rationale: "O descarte no lixo comum também apresenta risco de contaminar o ambiente." },{ text: "O tutor deve acionar o Departamento de Controle de Zoonoses.", correct: true, rationale: "Esta é a orientação oficial para garantir o manejo adequado do corpo e evitar a contaminação ambiental." },{ text: "O corpo deve ser levado a uma clínica veterinária para descarte.", correct: false, rationale: "A responsabilidade pelo manejo do corpo em casos de zoonoses é do serviço público de vigilância." }] },
-            { question: "Para pacientes que realizaram cirurgia bariátrica, o tratamento com Itraconazol pode apresentar um desafio. Por quê?", hint: "Pense em como a cirurgia bariátrica muda o sistema digestivo e como isso pode afetar a forma como os remédios orais funcionam.", options: [{ text: "O medicamento causa reações alérgicas graves nesse grupo de pacientes.", correct: false, rationale: "Não há relatos de aumento de alergia, mas sim de um problema relacionado à eficácia." },{ text: "A absorção do Itraconazol pode ser ineficaz devido às alterações no trato gastrointestinal.", correct: true, rationale: "A nota técnica explica que a cirurgia altera o pH e a anatomia do TGI, o que prejudica a absorção de medicamentos como o Itraconazol." },{ text: "O Itraconazol interage perigosamente com as vitaminas que esses pacientes tomam.", correct: false, rationale: "Embora interações medicamentosas existam, o principal problema relatado é a falta de absorção do antifúngico." },{ text: "A dose do medicamento precisa ser o dobro da recomendada para fazer efeito.", correct: false, rationale: "O problema não é a dose, mas a capacidade do organismo de absorver o medicamento; simplesmente dobrar a dose não resolveria." }] },
-            { question: "Na suspeita de lesão por esporotricose, uma medida caseira é recomendada como adjuvante enquanto se busca atendimento médico. Qual é ela?", hint: "O fungo Sporothrix não se desenvolve bem em temperaturas mais elevadas.", options: [{ text: "Aplicação de álcool ou iodo na ferida.", correct: false, rationale: "A aplicação de substâncias irritantes não é recomendada; a orientação principal é a limpeza com água e sabão." },{ text: "Manter a ferida coberta com um curativo o tempo todo.", correct: false, rationale: "Embora a proteção seja importante, a recomendação adjuvante específica envolve outra abordagem." },{ text: "Realização de compressas mornas a quentes no local.", correct: true, rationale: "A nota técnica menciona que o calor local ajuda a reduzir a proliferação do fungo, que é sensível a temperaturas mais altas." },{ text: "Uso de pomadas antibióticas de venda livre.", correct: false, rationale: "Pomadas antibióticas tratam bactérias e não teriam efeito sobre o fungo causador da esporotricose." }] }
+            {
+              question: "Qual relatório, publicado em 1920 no Reino Unido, foi um dos primeiros a propor uma abordagem estruturada para a organização dos sistemas de saúde, influenciando a criação do NHS?",
+              options: [
+                { text: "Relatório Beveridge", correct: false, rationale: "O Relatório Beveridge foi publicado em 1942 e serviu de base para a criação do NHS em 1948." },
+                { text: "Relatório Dawson", correct: true, rationale: "O Relatório Dawson, de 1920, propôs uma rede integrada de assistência médica e influenciou o desenvolvimento do NHS." },
+                { text: "Relatório Semashko", correct: false, rationale: "O modelo Semashko foi desenvolvido na União Soviética e não teve influência direta na criação do NHS britânico." },
+                { text: "Relatório Bismarck", correct: false, rationale: "O modelo Bismarck surgiu na Alemanha em 1883 e se baseia em seguros sociais, não sendo a principal influência para o NHS." }
+              ],
+              hint: "Pense no relatório que introduziu os conceitos de hierarquização e regionalização dos serviços de saúde no Reino Unido."
+            },
+            {
+              question: "Qual dos seguintes não é um princípio central do Relatório Dawson?",
+              options: [
+                  { text: "Hierarquização dos serviços de saúde", correct: false, rationale: "A organização da assistência em níveis de complexidade (primário, secundário e terciário) é um dos pilares do relatório." },
+                  { text: "Regionalização da assistência médica", correct: false, rationale: "A divisão do país em regiões de saúde para atender a população local é uma proposta central do relatório." },
+                  { text: "Financiamento baseado em seguros sociais", correct: true, rationale: "O relatório defendia o acesso equitativo e gratuito, financiado pelo Estado, e não um modelo de seguros como o de Bismarck." },
+                  { text: "Prevenção e promoção da saúde", correct: false, rationale: "O relatório dava grande ênfase à atenção primária e à medicina preventiva." }
+              ],
+              hint: "Considere o modelo de financiamento que caracteriza o sistema proposto por Bismarck, em oposição ao que foi implementado no NHS britânico."
+            },
+            {
+                question: "O Sistema Único de Saúde (SUS) no Brasil foi influenciado pelos princípios do Relatório Dawson, especialmente em relação à:",
+                options: [
+                    { text: "Centralização total da gestão e financiamento privado", correct: false, rationale: "O SUS adota a descentralização da gestão e o financiamento é majoritariamente público, contrariando a ideia de financiamento privado." },
+                    { text: "Regionalização e hierarquização dos serviços", correct: true, rationale: "A criação do SUS em 1988 seguiu os princípios de regionalização e hierarquização, dividindo os serviços em atenção primária, secundária e terciária." },
+                    { text: "Foco exclusivo em hospitais e ausência de atenção primária", correct: false, rationale: "Assim como o Relatório Dawson, o SUS valoriza a atenção primária como porta de entrada do sistema." },
+                    { text: "Acesso restrito à população de baixa renda", correct: false, rationale: "O SUS, inspirado em sistemas universais, visa garantir acesso a toda a população, não apenas à de baixa renda." }
+                ],
+                hint: "Pense em como o SUS organiza seus serviços em diferentes níveis de complexidade e distribui as responsabilidades pelo território."
+            },
+            {
+                question: "Qual modelo de sistema de saúde é caracterizado pela ausência de uma organização hierarquizada e pelo acesso dependente da capacidade de pagamento, sendo os Estados Unidos um exemplo?",
+                options: [
+                    { text: "Modelo Beveridge", correct: false, rationale: "O Modelo Beveridge, adotado no Reino Unido, é universal, financiado por impostos e com serviços majoritariamente públicos." },
+                    { text: "Modelo de Segmentação e Paralelismo", correct: false, rationale: "Este modelo, comum na América Latina, possui múltiplos sistemas paralelos (público, seguros sociais, privado), mas não corresponde à descentralização total do modelo de mercado." },
+                    { text: "Modelo Hospitalocêntrico (Semashko)", correct: false, rationale: "O modelo Semashko é altamente centralizado no Estado, com foco em hospitais, o oposto do modelo liberal baseado no mercado." },
+                    { text: "Sistema de Saúde Baseado no Mercado (Modelo Liberal)", correct: true, rationale: "Este modelo, predominante nos EUA, não possui coordenação central, e o acesso depende de seguros privados ou pagamento direto, gerando desigualdade." }
+                ],
+                hint: "Este modelo prioriza a livre concorrência entre prestadores de serviços e seguradoras, sem uma estrutura pública universal."
+            },
+            {
+                question: "Qual é a principal fonte de financiamento do Modelo Beveridge?",
+                options: [
+                    { text: "Contribuições obrigatórias de empregadores e empregados", correct: false, rationale: "Este é o método de financiamento do Modelo Bismarck, não do Beveridge." },
+                    { text: "Pagamento direto dos usuários no momento do serviço (Out-of-Pocket)", correct: false, rationale: "O pagamento direto caracteriza a ausência de um sistema formal, enquanto o Modelo Beveridge busca eliminar essa barreira." },
+                    { text: "Arrecadação de impostos gerais pelo governo", correct: true, rationale: "O Modelo Beveridge é caracterizado por ter financiamento totalmente público, por meio da arrecadação de impostos gerais." },
+                    { text: "Prêmios de seguros de saúde privados", correct: false, rationale: "Seguros privados são a base do Modelo Liberal (baseado no mercado), não do Beveridge." }
+                ],
+                hint: "Pense no sistema que inspirou o NHS no Reino Unido, onde a saúde é vista como um direito financiado por toda a sociedade."
+            },
+            {
+                question: "O Modelo Bismarck, originado na Alemanha, tem como uma de suas principais características:",
+                options: [
+                    { text: "A maioria dos hospitais e clínicas são públicos e geridos pelo Estado.", correct: false, rationale: "Esta é uma característica do Modelo Beveridge. No Modelo Bismarck, a maioria dos provedores é privada." },
+                    { text: "Financiamento baseado em contribuições obrigatórias para fundos de seguro de saúde.", correct: true, rationale: "O sistema Bismarck é financiado por contribuições de empregadores e trabalhadores para fundos de seguro (sickness funds)." },
+                    { text: "O Estado atua como único pagador (single-payer) dos serviços de saúde.", correct: false, rationale: "O sistema de pagador único é característico do modelo NHI (Canadense), não do Bismarck, que possui múltiplos fundos de seguro." },
+                    { text: "O acesso à saúde é limitado à capacidade de pagamento do paciente.", correct: false, rationale: "Esta é a característica do modelo Out-of-Pocket. O modelo Bismarck oferece cobertura universal através de seguro obrigatório." }
+                ],
+                hint: "Este modelo foi criado para fortalecer a lealdade da classe trabalhadora ao Estado através de um sistema de seguridade social."
+            },
+            {
+                question: "Qual das seguintes é uma desvantagem comum associada ao Modelo Beveridge?",
+                options: [
+                    { text: "Altos custos administrativos devido à multiplicidade de seguradoras.", correct: false, rationale: "Esta é uma desvantagem do Modelo Bismarck. O Modelo Beveridge tem custos administrativos menores por ter um único financiador." },
+                    { text: "Desigualdade extrema no acesso, baseada na capacidade de pagamento.", correct: false, rationale: "Esta é a principal desvantagem do modelo Out-of-Pocket. O Modelo Beveridge promove o acesso universal." },
+                    { text: "Longas filas e tempos de espera para procedimentos especializados.", correct: true, rationale: "Devido à alta demanda e ao financiamento público limitado, longas filas de espera são um desafio comum em sistemas baseados no Modelo Beveridge." },
+                    { text: "Dependência de empregadores para a cobertura de saúde.", correct: false, rationale: "A dependência do emprego para ter cobertura é um desafio do Modelo Bismarck." }
+                ],
+                hint: "Pense no que acontece quando a demanda por serviços de saúde gratuitos é muito alta e o financiamento é limitado pelo orçamento do governo."
+            },
+            {
+                question: "O Modelo Semashko, desenvolvido na União Soviética, priorizava:",
+                options: [
+                    { text: "A competição entre hospitais privados para incentivar a inovação.", correct: false, rationale: "O modelo Semashko era totalmente estatal, sem espaço para competição privada. A competição é uma característica de modelos como o Bismarck." },
+                    { text: "A liberdade de escolha de médicos e hospitais pelos pacientes.", correct: false, rationale: "A liberdade de escolha é valorizada no Modelo Bismarck, enquanto o modelo Semashko era altamente centralizado e com pouca autonomia local." },
+                    { text: "A medicina preventiva, o controle de doenças infecciosas e a saúde do trabalhador.", correct: true, rationale: "O modelo Semashko tinha forte ênfase na medicina preventiva e no controle de doenças infecciosas, alinhado aos princípios socialistas de bem-estar dos trabalhadores." },
+                    { text: "O financiamento através de seguros de saúde gerenciados por sindicatos.", correct: false, rationale: "O financiamento era 100% público, proveniente do orçamento do Estado, e não de seguros sindicais." }
+                ],
+                hint: "Este modelo foi criado após a Revolução Russa de 1917, com o objetivo de alinhar a saúde aos princípios do socialismo."
+            },
+            {
+                question: "O modelo National Health Insurance (NHI), como o do Canadá, combina características de quais outros dois modelos?",
+                options: [
+                    { text: "Semashko e Out-of-Pocket", correct: false, rationale: "O modelo NHI é universal e financiado publicamente, o oposto do modelo Out-of-Pocket, e sua provisão privada o difere do modelo Semashko, que é totalmente estatal." },
+                    { text: "Beveridge e Bismarck", correct: true, rationale: "O modelo NHI combina o financiamento público por impostos (como o Beveridge) com a prestação de serviços por entidades privadas (como no Bismarck)." },
+                    { text: "Bismarck e Out-of-Pocket", correct: false, rationale: "O modelo NHI garante cobertura universal, o que o diferencia fundamentalmente do modelo Out-of-Pocket, que se baseia na capacidade de pagamento." },
+                    { text: "Beveridge e Semashko", correct: false, rationale: "Embora ambos tenham financiamento estatal, o modelo NHI utiliza prestadores privados, enquanto o Semashko tem uma rede totalmente pública." }
+                ],
+                hint: "Pense em um sistema que tem financiamento público (como o Reino Unido) mas os hospitais e médicos são, em sua maioria, privados (como na Alemanha)."
+            },
+            {
+                question: "Qual é a principal característica de um sistema de saúde Out-of-Pocket?",
+                options: [
+                    { text: "Cobertura universal garantida pelo Estado.", correct: false, rationale: "Este modelo é definido pela ausência de cobertura universal; o acesso depende exclusivamente da capacidade de pagamento." },
+                    { text: "Financiamento através de impostos e gestão centralizada.", correct: false, rationale: "Esta é uma característica dos modelos Beveridge ou Semashko, não do Out-of-Pocket." },
+                    { text: "O indivíduo paga diretamente pelos serviços de saúde no momento do uso.", correct: true, rationale: "Neste modelo, o financiamento vem do pagamento direto do paciente ao provedor do serviço." },
+                    { text: "Sistema baseado em múltiplos fundos de seguro de saúde obrigatórios.", correct: false, rationale: "Múltiplos fundos de seguro são a base do Modelo Bismarck." }
+                ],
+                hint: "Este modelo é mais comum em países de baixa renda, onde não há um sistema de saúde estruturado."
+            },
+            {
+                question: "Uma das principais vantagens do modelo NHI (Canadense) é:",
+                options: [
+                    { text: "Incentivo à competição e inovação tecnológica rápida.", correct: false, rationale: "Como o sistema é majoritariamente público no financiamento, há menos incentivos para competição e inovação rápida em comparação com modelos de mercado." },
+                    { text: "Menores custos administrativos devido ao sistema de pagador único (single-payer).", correct: true, rationale: "Ao ter apenas um pagador (o governo), o sistema reduz a burocracia e os custos administrativos associados a múltiplas seguradoras." },
+                    { text: "Tempos de espera muito baixos para consultas com especialistas.", correct: false, rationale: "Assim como no modelo Beveridge, o financiamento limitado pode gerar filas e tempos de espera para procedimentos especializados." },
+                    { text: "Total independência do orçamento público.", correct: false, rationale: "Pelo contrário, o sistema é altamente dependente do orçamento público, tornando-se vulnerável a crises econômicas." }
+                ],
+                hint: "Considere o que acontece com a burocracia quando não há necessidade de negociação entre múltiplos planos de saúde."
+            },
+            {
+                question: "Qual modelo de estruturação de saúde é caracterizado pela existência de múltiplos sistemas paralelos, como um público para baixa renda, um de seguros sociais para trabalhadores formais e um privado?",
+                options: [
+                    { text: "Modelo Comunitário", correct: false, rationale: "O modelo comunitário é organizado de forma autônoma pela própria população, com foco em medicina tradicional, não em sistemas paralelos para diferentes classes sociais." },
+                    { text: "Modelo Hospitalocêntrico (Semashko)", correct: false, rationale: "O modelo Semashko é um sistema único e estatal para toda a população, não segmentado." },
+                    { text: "Modelo de Segmentação e Paralelismo", correct: true, rationale: "Comum em muitos países da América Latina, este modelo é definido pela segmentação do acesso, onde diferentes populações utilizam diferentes redes de serviços que operam em paralelo." },
+                    { text: "Modelo Baseado no Mercado (Liberal)", correct: false, rationale: "O modelo de mercado é descentralizado e baseado em seguros privados ou pagamento direto, sem a estrutura de múltiplos sistemas públicos ou de seguro social paralelos." }
+                ],
+                hint: "Este modelo é frequentemente criticado pela forte desigualdade no acesso e qualidade dos serviços entre diferentes segmentos da população."
+            },
+            {
+                question: "O antigo modelo soviético Semashko, apesar de garantir acesso universal, apresentava como uma de suas principais fraquezas:",
+                options: [
+                    { text: "Altos custos com copagamentos para os pacientes.", correct: false, rationale: "O acesso no modelo Semashko era totalmente gratuito, sem custos diretos para os cidadãos." },
+                    { text: "Falta de capilaridade, com serviços concentrados apenas em grandes cidades.", correct: false, rationale: "Pelo contrário, uma de suas forças era a alta capilaridade, com serviços básicos disponíveis mesmo em áreas rurais." },
+                    { text: "Ineficiência administrativa e baixa qualidade devido à centralização excessiva.", correct: true, rationale: "A centralização extrema gerava burocracia, ineficiência e, com a falta de investimentos, levava à obsolescência tecnológica e baixa qualidade dos serviços." },
+                    { text: "Investimento excessivo em especialidades médicas em detrimento da prevenção.", correct: false, rationale: "Ocorreu o oposto: a atenção excessiva à prevenção deixou os serviços de alta complexidade defasados." }
+                ],
+                hint: "Pense nos problemas que surgem quando um sistema de saúde é planejado de forma totalmente centralizada, com pouca autonomia local."
+            },
+            {
+                question: "De acordo com as tabelas comparativas, qual modelo de saúde tende a apresentar o menor tempo de espera para especialidades, para quem pode pagar?",
+                options: [
+                    { text: "Beveridge", correct: false, rationale: "O modelo Beveridge costuma ter tempos de espera de médios a altos, na ordem de 8 semanas." },
+                    { text: "Bismarck", correct: false, rationale: "O modelo Bismarck apresenta tempos de espera baixos, em torno de 3 semanas, devido à competição entre provedores." },
+                    { text: "NHI (Canadá)", correct: false, rationale: "O modelo NHI, semelhante ao Beveridge em seus desafios de acesso, apresenta tempos de espera médios a altos, em torno de 7 semanas." },
+                    { text: "Out-of-Pocket", correct: true, rationale: "Neste modelo, quem pode pagar tem acesso rápido, com tempo de espera baixo (cerca de 1 semana), pois o acesso é direto e não regulado." }
+                ],
+                hint: "Considere o modelo onde o acesso não depende de uma fila pública ou de autorização de um seguro, mas sim do pagamento direto."
+            },
+            {
+                question: "Qual modelo de saúde geralmente apresenta os maiores gastos como percentual do PIB, segundo os dados apresentados?",
+                options: [
+                    { text: "Beveridge", correct: false, rationale: "O modelo Beveridge tem um gasto em torno de 9.8% do PIB." },
+                    { text: "Bismarck", correct: true, rationale: "O modelo Bismarck apresenta o maior gasto, com cerca de 11.5% do PIB, devido aos custos elevados e à competição no setor." },
+                    { text: "Semashko", correct: false, rationale: "O modelo Semashko tem um gasto de aproximadamente 10.2% do PIB." },
+                    { text: "Out-of-Pocket", correct: false, rationale: "O modelo Out-of-Pocket tem o menor gasto governamental, com cerca de 3.5% do PIB, pois a maior parte é paga pelos indivíduos." }
+                ],
+                hint: "Pense no sistema que envolve múltiplos prestadores privados, seguradoras e alta tecnologia, o que tende a elevar os custos gerais."
+            },
+            {
+                question: "A criação do National Health Service (NHS) no Reino Unido em 1948 foi diretamente influenciada por qual documento?",
+                options: [
+                    { text: "Relatório Dawson", correct: false, rationale: "O Relatório Dawson (1920) foi uma influência teórica importante, mas a base direta para a criação do NHS foi o relatório de 1942." },
+                    { text: "Relatório Beveridge", correct: true, rationale: "Publicado em 1942, o Relatório Beveridge de William Beveridge defendeu a criação de um sistema de seguridade social abrangente, que culminou na criação do NHS em 1948." },
+                    { text: "Lei de Seguro de Saúde Alemã", correct: false, rationale: "A lei alemã de 1883 criou o modelo Bismarck, que é diferente do modelo Beveridge adotado pelo NHS." },
+                    { text: "Constituição da União Soviética", correct: false, rationale: "A constituição soviética estabeleceu as bases para o modelo Semashko, que não influenciou o sistema britânico." }
+                ],
+                hint: "Este relatório foi publicado durante a Segunda Guerra Mundial e propunha um Estado de bem-estar social."
+            },
+            {
+                question: "O papel do Estado no Modelo Bismarck é principalmente de:",
+                options: [
+                    { text: "Provedor direto de todos os serviços de saúde.", correct: false, rationale: "O Estado como provedor direto é característico dos modelos Beveridge e Semashko. No modelo Bismarck, a maioria dos provedores é privada." },
+                    { text: "Financiador único (single-payer) do sistema.", correct: false, rationale: "O financiador único é a marca do modelo NHI. O modelo Bismarck tem múltiplos financiadores (os fundos de seguro)." },
+                    { text: "Regulador, garantindo que as seguradoras cumpram as regras.", correct: true, rationale: "No Modelo Bismarck, o Estado atua como regulador, garantindo que os múltiplos fundos de seguro operem de forma justa e não recusem pacientes." },
+                    { text: "Mínimo ou inexistente.", correct: false, rationale: "Um papel mínimo do Estado é característico do modelo Out-of-Pocket. O Estado é um ator central na regulação do modelo Bismarck." }
+                ],
+                hint: "Neste modelo, o Estado não é o principal dono dos hospitais nem o único pagador, mas ele estabelece as regras do jogo para as seguradoras."
+            },
+            {
+                question: "Qual dos seguintes países é um exemplo clássico do Modelo Beveridge?",
+                options: [
+                    { text: "Alemanha", correct: false, rationale: "A Alemanha é o país de origem e principal exemplo do Modelo Bismarck." },
+                    { text: "Canadá", correct: false, rationale: "O Canadá é o principal exemplo do modelo National Health Insurance (NHI)." },
+                    { text: "Reino Unido", correct: true, rationale: "O Reino Unido, com o seu National Health Service (NHS), é o exemplo original e mais famoso do Modelo Beveridge." },
+                    { text: "Cuba", correct: false, rationale: "Cuba implementou um sistema de saúde inspirado no modelo soviético Semashko." }
+                ],
+                hint: "Pense no país que criou o NHS (National Health Service) após a Segunda Guerra Mundial."
+            },
+            {
+                question: "Uma característica do Modelo Comunitário de saúde é:",
+                options: [
+                    { text: "Forte dependência de hospitais centralizados e tecnologia de ponta.", correct: false, rationale: "O modelo comunitário tem dificuldade de acesso a tecnologias médicas e tratamentos especializados, focando mais na base." },
+                    { text: "Planejamento centralizado pelo governo, com pouca autonomia local.", correct: false, rationale: "A autonomia local e a participação da comunidade são centrais neste modelo, o oposto do planejamento centralizado." },
+                    { text: "Ênfase na medicina tradicional e uso de agentes comunitários de saúde.", correct: true, rationale: "Este modelo valoriza a medicina tradicional e preventiva e organiza os serviços a partir da própria comunidade, utilizando agentes locais." },
+                    { text: "Financiamento baseado em contribuições obrigatórias de empresas e trabalhadores.", correct: false, rationale: "Este é o modelo de financiamento do sistema Bismarck. O modelo comunitário muitas vezes depende de recursos externos para sua sustentabilidade." }
+                ],
+                hint: "Este modelo é frequentemente encontrado em áreas rurais e indígenas, onde a participação social é fundamental para a gestão da saúde."
+            },
+            {
+                question: "De acordo com os dados apresentados, qual indicador de saúde é drasticamente pior em países com modelo Out-of-Pocket em comparação com os outros modelos?",
+                options: [
+                    { text: "Gasto com Saúde (% do PIB)", correct: false, rationale: "O gasto governamental com saúde como % do PIB é o mais baixo no modelo Out-of-Pocket, não o pior indicador em termos de resultado para a população." },
+                    { text: "Tempo Médio de Espera para Especialidades", correct: false, rationale: "O tempo de espera para quem pode pagar é baixo, o que pode ser visto como um ponto positivo para uma parcela da população." },
+                    { text: "Mortalidade Infantil", correct: true, rationale: "A mortalidade infantil em sistemas Out-of-Pocket (38 por 1.000) é mais de 10 vezes maior do que nos outros modelos (que variam de 2.8 a 4.2), indicando uma falha grave no acesso a cuidados básicos." },
+                    { text: "Índice de Satisfação da População", correct: false, rationale: "Embora o índice de satisfação seja o mais baixo (45%), a mortalidade infantil reflete um impacto mais direto e grave na saúde da população." }
+                ],
+                hint: "Pense no indicador que melhor reflete a falta de acesso a cuidados essenciais para mães e crianças."
+            }
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
+
+        const questionTextElement = document.getElementById('question-text');
+        const questionHintElement = document.getElementById('question-hint');
+        const answersButtonsElement = document.getElementById('answers-buttons');
+        const nextButton = document.getElementById('next-button');
+        const feedbackArea = document.getElementById('feedback-area');
+        const progressText = document.getElementById('progress-text');
+        const quizContent = document.getElementById('quiz-content');
+        const quizResults = document.getElementById('quiz-results');
+        const scoreText = document.getElementById('score-text');
+        const restartButton = document.getElementById('restart-button');
+
         let currentQuestionIndex = 0;
         let score = 0;
 
-        function renderQuiz() {
-            quizContainer.innerHTML = ''; // Clear previous content
-            if (currentQuestionIndex < quizData.length) {
-                const questionData = quizData[currentQuestionIndex];
-                
-                const questionElement = document.createElement('div');
-                questionElement.className = 'mb-6';
-                questionElement.innerHTML = `
-                    <p class="text-lg font-semibold mb-1">Pergunta ${currentQuestionIndex + 1} de ${quizData.length}</p>
-                    <h3 class="text-xl text-slate-800">${questionData.question}</h3>
-                    <p class="text-sm text-slate-500 mt-2"><em>Dica: ${questionData.hint}</em></p>
-                `;
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            quizContent.classList.remove('hidden');
+            quizResults.classList.add('hidden');
+            nextButton.classList.add('hidden');
+            showQuestion();
+        }
 
-                const optionsElement = document.createElement('div');
-                optionsElement.className = 'space-y-3';
-                
-                questionData.options.forEach((option, index) => {
-                    const optionButton = document.createElement('button');
-                    optionButton.className = 'w-full text-left p-4 rounded-lg border border-slate-300 bg-slate-50 hover:bg-slate-100 transition-colors';
-                    optionButton.textContent = option.text;
-                    optionButton.onclick = () => selectAnswer(optionButton, option, questionData.options);
-                    optionsElement.appendChild(optionButton);
-                });
+        function showQuestion() {
+            resetState();
+            const questionData = quizData[currentQuestionIndex];
+            questionTextElement.innerText = questionData.question;
+            questionHintElement.innerText = `Dica: ${questionData.hint}`;
+            progressText.innerText = `Pergunta ${currentQuestionIndex + 1} de ${quizData.length}`;
 
-                quizContainer.appendChild(questionElement);
-                quizContainer.appendChild(optionsElement);
+            questionData.options.forEach(option => {
+                const button = document.createElement('button');
+                button.innerText = option.text;
+                button.classList.add('w-full', 'p-4', 'border-2', 'rounded-lg', 'text-left', 'hover:bg-gray-100', 'transition-colors', 'duration-200');
+                if (option.correct) {
+                    button.dataset.correct = true;
+                }
+                button.dataset.rationale = option.rationale;
+                button.addEventListener('click', selectAnswer);
+                answersButtonsElement.appendChild(button);
+            });
+        }
 
+        function resetState() {
+            nextButton.classList.add('hidden');
+            feedbackArea.innerHTML = '';
+            while (answersButtonsElement.firstChild) {
+                answersButtonsElement.removeChild(answersButtonsElement.firstChild);
+            }
+        }
+
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const isCorrect = selectedButton.dataset.correct === 'true';
+            
+            if (isCorrect) {
+                score++;
+            }
+
+            Array.from(answersButtonsElement.children).forEach(button => {
+                setStatusClass(button, button.dataset.correct === 'true');
+                button.disabled = true; // Disable all buttons
+            });
+
+            feedbackArea.innerHTML = `
+                <p class="font-bold text-lg ${isCorrect ? 'text-green-600' : 'text-red-600'}">
+                    ${isCorrect ? 'Resposta Correta!' : 'Resposta Incorreta!'}
+                </p>
+                <p class="text-gray-700 mt-2">${selectedButton.dataset.rationale}</p>
+            `;
+
+            if (quizData.length > currentQuestionIndex + 1) {
+                nextButton.classList.remove('hidden');
             } else {
                 showResults();
             }
         }
-        
-        function selectAnswer(button, selectedOption, allOptions) {
-            const parent = button.parentElement;
-            const buttons = parent.querySelectorAll('button');
-            
-            buttons.forEach((btn, index) => {
-                btn.disabled = true;
-                const option = allOptions[index];
-                
-                let feedbackClass = '';
-                let feedbackIcon = '';
 
-                if (option.correct) {
-                    feedbackClass = 'bg-green-100 border-green-500 text-green-800';
-                    feedbackIcon = '<i class="fas fa-check-circle mr-2"></i>';
-                } else if (option === selectedOption && !option.correct) {
-                    feedbackClass = 'bg-red-100 border-red-500 text-red-800';
-                    feedbackIcon = '<i class="fas fa-times-circle mr-2"></i>';
-                } else {
-                    feedbackClass = 'bg-slate-100 border-slate-300 text-slate-500';
-                }
-                
-                btn.className = `w-full text-left p-4 rounded-lg border ${feedbackClass}`;
-                
-                const rationaleElement = document.createElement('p');
-                rationaleElement.className = 'text-sm mt-2 px-4';
-                rationaleElement.innerHTML = `${feedbackIcon} ${option.rationale}`;
-                btn.after(rationaleElement);
-            });
-
-            if (selectedOption.correct) {
-                score++;
+        function setStatusClass(element, correct) {
+            clearStatusClass(element);
+            if (correct) {
+                element.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+            } else {
+                element.classList.add('bg-red-100', 'border-red-500', 'text-red-800');
             }
-            
-            const nextButton = document.createElement('button');
-            nextButton.textContent = currentQuestionIndex < quizData.length - 1 ? 'Próxima Pergunta' : 'Ver Resultados';
-            nextButton.className = 'mt-6 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105';
-            nextButton.onclick = () => {
-                currentQuestionIndex++;
-                renderQuiz();
-            };
-            quizContainer.appendChild(nextButton);
+        }
+
+        function clearStatusClass(element) {
+            element.classList.remove('bg-green-100', 'border-green-500', 'text-green-800');
+            element.classList.remove('bg-red-100', 'border-red-500', 'text-red-800');
         }
         
+        function handleNext() {
+            currentQuestionIndex++;
+            showQuestion();
+        }
+
         function showResults() {
-             quizContainer.innerHTML = `
-                <div class="text-center">
-                    <h3 class="text-2xl font-bold mb-4">Quiz Finalizado!</h3>
-                    <p class="text-lg mb-4">Sua pontuação final foi:</p>
-                    <p class="text-5xl font-bold text-teal-700 mb-6">${score} de ${quizData.length}</p>
-                    <button class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105" onclick="restartQuiz()">
-                        Refazer o Quiz
-                    </button>
-                </div>
-             `;
+            quizContent.classList.add('hidden');
+            quizResults.classList.remove('hidden');
+            scoreText.innerText = `${score} / ${quizData.length}`;
         }
 
-        function restartQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            renderQuiz();
-        }
+        nextButton.addEventListener('click', handleNext);
+        restartButton.addEventListener('click', startQuiz);
 
-        // Initial render
-        renderQuiz();
-
+        // A lógica do Quiz só inicia depois da senha correta, então não chamamos startQuiz() aqui.
+        
     </script>
 </body>
 </html>
-
-
 
 
